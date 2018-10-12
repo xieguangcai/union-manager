@@ -1,0 +1,11 @@
+debug: true
+logging:
+  level:
+    root: info
+spring:
+  profiles: cc-test
+  datasource:
+    url: jdbc:mysql://172.20.135.35:3306/skyid
+    username: skyid
+    password: skyid@)!$
+    driver-class-name: com.mysql.jdbc.Driver

@@ -1,0 +1,15 @@
+debug: false
+spring:
+  profiles:
+    active: cc-localhost
+  jpa:
+    show-sql: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  http:
+    encoding:
+      force: true
+server:
+  port: 8081
+  tomcat:
+    uri-encoding: UTF-8

@@ -1,0 +1,14 @@
+debug: true
+logging:
+  level:
+    root: info
+spring:
+  profiles: cc-localhost
+  datasource:
+    url: jdbc:mysql://127.0.0.1/union_role?useUnicode=true&amp;characterEncoding=utf8mb4
+    username: root
+    password: 11111111
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    show-sql: true
