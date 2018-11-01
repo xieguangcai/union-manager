@@ -9,7 +9,29 @@ spring:
   http:
     encoding:
       force: true
+  freemarker:
+    enabled: true
+    template-loader-path: classpath:/templates/
+  security:
+    user:
+      password: password
+      name: xgc
 server:
-  port: 8081
+  port: 8088
   tomcat:
     uri-encoding: UTF-8
+  servlet:
+    context-path: /ums
+security:
+  oauth2:
+    client:
+      clientId: acme
+      clientSecret: acmesecret
+      authorized-grant-types: authorization_code,refresh_token,password
+      scope: openid
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+#framark配置

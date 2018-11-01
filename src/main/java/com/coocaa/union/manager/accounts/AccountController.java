@@ -65,10 +65,7 @@ public class AccountController extends BaseController {
         oldEneity.setAccountStatus(account.getAccountStatus());
         oldEneity.setDepartment(account.getDepartment());
         if (account.getPwd() != null) {
-            oldEneity.setSalt(UUID.randomUUID().toString().replace("-", ""));
-            String sPwd = account.getPwd() + oldEneity.getSalt();
-            String encryptPwd = DigestUtils.md5DigestAsHex(sPwd.getBytes("utf-8"));
-            oldEneity.setPwd(encryptPwd);
+            oldEneity.setPwd(encryptPwd(account.getPwd()));
         }
         service.save(oldEneity);
         return ResponseObject.success(true);
@@ -79,13 +76,13 @@ public class AccountController extends BaseController {
             method = {RequestMethod.GET, RequestMethod.POST}
     )
     @ResponseBody
-    public ResponseObject<Boolean> addNew(@RequestBody Account account) throws UnsupportedEncodingException {
+    public ResponseObject<Boolean> addNew(@RequestBody Account account) {
         account.setAccountId(null);
+        if(StringUtils.isBlank(account.getPwd()) || account.getPwd().length() < 6){
+            throw new BaseJSONException(ErrorCodes.INVALID_INPUT_PARAMS, "请输入至少6位密码");
+        }
         if (account.getPwd() != null) {
-            account.setSalt(UUID.randomUUID().toString().replace("-", ""));
-            String sPwd = account.getPwd() + account.getSalt();
-            String encryptPwd = DigestUtils.md5DigestAsHex(sPwd.getBytes("utf-8"));
-            account.setPwd(encryptPwd);
+            account.setPwd(encryptPwd(account.getPwd()));
         }
         service.save(account);
         return ResponseObject.success(true);

@@ -12,3 +12,9 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
+  redis:
+    host: 172.20.135.33
+    port: 7711
+    jedis:
+      pool:
+        max-wait: 2000ms

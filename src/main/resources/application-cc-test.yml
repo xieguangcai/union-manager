@@ -9,3 +9,9 @@ spring:
     username: skyid
     password: skyid@)!$
     driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 172.20.135.33
+    port: 7711
+    jedis:
+      pool:
+        max-wait: 2000ms
