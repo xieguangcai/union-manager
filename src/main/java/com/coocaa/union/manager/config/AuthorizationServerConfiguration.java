@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
     
     private static final String DEMO_RESOURCE_ID = "order";
-    
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -35,7 +35,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     RedisConnectionFactory redisConnectionFactory;
     @Autowired
     BaseClientDetailService clientDetailService;
-    
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //String finalSecret = "{bcrypt}"+new BCryptPasswordEncoder().encode("123456");
@@ -98,5 +98,5 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                    .tokenKeyAccess("isAuthenticated()")
                    .checkTokenAccess("permitAll()");
     }
-    
+
 }

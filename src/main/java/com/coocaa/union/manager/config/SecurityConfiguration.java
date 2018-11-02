@@ -1,5 +1,6 @@
 package com.coocaa.union.manager.config;
 
+import com.coocaa.union.manager.accounts.AccountService;
 import com.coocaa.union.manager.auth.BaseUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,19 +16,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //启用方法级的权限认证
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    BaseUserDetailService userDetailService;
-
+    AccountService accountService;
     //通过自定义userDetailsService 来实现查询数据库，手机，二维码等多种验证方式
     @Bean
     @Override
     protected UserDetailsService userDetailsService(){
         //采用一个自定义的实现UserDetailsService接口的类
-        return userDetailService;
+        return new BaseUserDetailService(accountService);
     }
 
     @Override

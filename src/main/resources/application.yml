@@ -12,10 +12,10 @@ spring:
   freemarker:
     enabled: true
     template-loader-path: classpath:/templates/
-  security:
-    user:
-      password: password
-      name: xgc
+#  security:
+#    user:
+#      password: password
+#      name: xgc
 server:
   port: 8088
   tomcat:
@@ -24,11 +24,15 @@ server:
     context-path: /ums
 security:
   oauth2:
+    store-type: redis
+    authorization:
+      token-key-access: isAuthenticated()
+      check-token-access: permitAll()
     client:
       clientId: acme
-      clientSecret: acmesecret
+      clientSecret: '{noop}123456'
       authorized-grant-types: authorization_code,refresh_token,password
-      scope: openid
+      scope: select,all
 logging:
   level:
     org:

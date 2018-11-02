@@ -1,6 +1,7 @@
 package com.coocaa.union.manager.config;
 
 import com.coocaa.union.manager.components.CCLettuceRedisTokenStore;
+import com.coocaa.union.manager.models.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -34,13 +35,8 @@ public class ResourcesServerConfiguration  extends ResourceServerConfigurerAdapt
     public void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasScope('select')")
-                .antMatchers(HttpMethod.POST, "/**").access("#oauth2.hasScope('select')")
-                .antMatchers(HttpMethod.PATCH, "/**").access("#oauth2.hasScope('select')")
-                .antMatchers(HttpMethod.PUT, "/**").access("#oauth2.hasScope('select')")
-                .antMatchers(HttpMethod.DELETE, "/**").access("#oauth2.hasScope('select')")
+                .antMatchers("/**").hasAnyAuthority(Roles.ROLE_VIEW, Roles.ROLE_ADMIN)
                 .and()
-
                 .headers().addHeaderWriter((request, response) -> {
             response.addHeader("Access-Control-Allow-Origin", "*");
             if (request.getMethod().equals("OPTIONS")) {
