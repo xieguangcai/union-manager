@@ -37,14 +37,15 @@ public class ResourcesServerConfiguration  extends ResourceServerConfigurerAdapt
                 .authorizeRequests()
                 .antMatchers("/oauth/**").permitAll()
                 .antMatchers("/api/me/changepwd").hasAnyAuthority(Roles.ROLE_VIEW)
+                .antMatchers("/user").hasAnyAuthority(Roles.ROLE_VIEW)
                 .antMatchers("/**").hasAnyAuthority(Roles.ROLE_ADMIN)
                 .and()
                 .headers().addHeaderWriter((request, response) -> {
-            response.addHeader("Access-Control-Allow-Origin", "*");
-            if (request.getMethod().equals("OPTIONS")) {
-                response.setHeader("Access-Control-Allow-Methods", request.getHeader("Access-Control-Request-Method"));
-                response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
-            }
+//            response.addHeader("Access-Control-Allow-Origin", "*");
+//            if (request.getMethod().equals("OPTIONS")) {
+//                response.setHeader("Access-Control-Allow-Methods", request.getHeader("Access-Control-Request-Method"));
+//                response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
+//            }
         });
     }
 }

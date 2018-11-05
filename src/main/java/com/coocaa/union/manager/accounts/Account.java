@@ -2,16 +2,16 @@ package com.coocaa.union.manager.accounts;
 
 import com.coocaa.union.manager.roles.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "union_accounts")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler","salt", "pwd"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler","salt"})
 public class Account {
     @Id
     @Column(name = "account_id")
@@ -21,6 +21,7 @@ public class Account {
     @Column(name = "nick_name", nullable = false, length = 100)
     private String nickName;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "pwd", length = 50)
     private String pwd;
 
@@ -52,7 +53,6 @@ public class Account {
     )
     private Set<Role> roles = new HashSet<>();
 
-
     public Integer getAccountId() {
         return accountId;
     }
@@ -83,6 +83,14 @@ public class Account {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Integer getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(Integer accountStatus) {
+        this.accountStatus = accountStatus;
     }
 
     public String getSalt() {
@@ -155,15 +163,6 @@ public class Account {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
-    }
-
-
-    public Integer getAccountStatus() {
-        return accountStatus;
-    }
-
-    public void setAccountStatus(Integer accountStatus) {
-        this.accountStatus = accountStatus;
     }
 
     public Set<Role> getRoles() {

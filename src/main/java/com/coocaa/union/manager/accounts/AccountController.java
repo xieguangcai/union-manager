@@ -25,7 +25,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ public class AccountController extends BaseController {
             method = {RequestMethod.GET, RequestMethod.POST}
     )
     @ResponseBody
-    public ResponseObject<Boolean> update(@RequestBody Account account) throws UnsupportedEncodingException {
+    public ResponseObject<Boolean> update(@RequestBody Account account) {
         if (account.getAccountId() == null) {
             throw new BaseJSONException(ErrorCodes.INVALID_INPUT_PARAMS, "accountId 无效");
         }
@@ -187,13 +186,7 @@ public class AccountController extends BaseController {
     @RequestMapping(value = "/user/save/roles")
     @ResponseBody
     public ResponseObject<Boolean> saveUserRoles(Integer accountId, Integer[] roleIds) {
-        Account account = repository.findById(accountId).orElseThrow(() -> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
-        account.getRoles().clear();
-        for (Integer roleId : roleIds) {
-            account.getRoles().add(new Role(roleId));
-        }
-        repository.save(account);
-
+        service.saveAccountRole(accountId, roleIds);
         return ResponseObject.success(true);
     }
 

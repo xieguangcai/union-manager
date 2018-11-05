@@ -32,4 +32,15 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Integer> implem
         logger.info("获取角色的个数为：" + roles);
         return account;
     }
+
+    @Transactional
+    @Override
+    public void saveAccountRole(Integer accountId, Integer[] roleIds) {
+        Account account = repository.findById(accountId).orElseThrow(() -> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
+        account.getRoles().clear();
+        for (Integer roleId : roleIds) {
+            account.getRoles().add(new Role(roleId));
+        }
+        repository.save(account);
+    }
 }
