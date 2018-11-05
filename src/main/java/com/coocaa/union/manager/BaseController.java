@@ -13,4 +13,9 @@ public class BaseController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(pwd);
     }
+
+    public boolean validPwd(String pwd, String encryptpwd){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(pwd, encryptpwd);
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -43,10 +44,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //            .and()
 //            .logout()
 //            .logoutSuccessUrl("/index.html");
-        http.authorizeRequests().anyRequest().fullyAuthenticated();
-        http.formLogin().loginPage("/login").failureUrl("/login?code=").permitAll();
-        http.logout().permitAll();
-        http.authorizeRequests().antMatchers("/oauth/authorize").permitAll();
+        http.authorizeRequests()
+                .and()
+                .authorizeRequests()
+                .anyRequest()
+                .fullyAuthenticated()
+                .antMatchers("/oauth/**")
+                .permitAll();
+//        http.authorizeRequests().anyRequest().fullyAuthenticated();
+//        http.formLogin().loginPage("/login").failureUrl("/login?code=").permitAll();
+//        http.logout().permitAll();
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
     
     /**

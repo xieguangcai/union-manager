@@ -1,16 +1,11 @@
 package com.coocaa.union.manager.auth;
 
 import com.coocaa.union.manager.accounts.Account;
-import com.coocaa.union.manager.accounts.AccountRepository;
 import com.coocaa.union.manager.accounts.AccountService;
 import com.coocaa.union.manager.auth.model.SysUserAuthentication;
 import com.coocaa.union.manager.roles.Role;
-import com.coocaa.union.manager.roles.RoleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

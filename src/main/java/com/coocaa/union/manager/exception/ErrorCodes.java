@@ -11,7 +11,11 @@ public enum ErrorCodes {
     SYSTEM_ERROR(1001,"系统错误"),
     INVALID_INPUT_PARAMS(1002,"参数错误：%s"),
 
-    NO_SUCH_ENTITY(1003, "没有找到对象");
+    NO_SUCH_ENTITY(1003, "没有找到对象"),
+    INVALID_OLD_PWD(9001, "旧密码错误"),
+
+    ;
+
     Integer code;
     private String msg;
     ErrorCodes(Integer code, String msg) {

@@ -35,7 +35,9 @@ public class ResourcesServerConfiguration  extends ResourceServerConfigurerAdapt
     public void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers("/**").hasAnyAuthority(Roles.ROLE_VIEW, Roles.ROLE_ADMIN)
+                .antMatchers("/oauth/**").permitAll()
+                .antMatchers("/api/me/changepwd").hasAnyAuthority(Roles.ROLE_VIEW)
+                .antMatchers("/**").hasAnyAuthority(Roles.ROLE_ADMIN)
                 .and()
                 .headers().addHeaderWriter((request, response) -> {
             response.addHeader("Access-Control-Allow-Origin", "*");

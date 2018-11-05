@@ -5,6 +5,7 @@ import com.coocaa.union.manager.exception.BaseJSONException;
 import com.coocaa.union.manager.exception.ErrorCodes;
 import com.coocaa.union.manager.roles.Role;
 import com.coocaa.union.manager.utils.ResponseObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,20 +16,20 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.*;
-
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/api")
@@ -38,16 +39,6 @@ public class AccountController extends BaseController {
     AccountRepository repository;
     @Autowired
     AccountService service;
-
-    @RequestMapping(
-            value = {"/user/login"},
-            method = {RequestMethod.GET, RequestMethod.POST}
-    )
-    @ResponseBody
-    public ResponseObject<String> userLogin(String userName, String password) {
-        return ResponseObject.success(UUID.randomUUID().toString());
-    }
-
 
     @RequestMapping(
             value = {"/user/update"},
@@ -203,6 +194,24 @@ public class AccountController extends BaseController {
         }
         repository.save(account);
 
+        return ResponseObject.success(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("/me/changepwd")
+    public ResponseObject<Boolean> changePwd(Principal user, String oldPwd, String newPwd){
+
+        if(StringUtils.isAnyBlank(oldPwd, newPwd)){
+            throw new BaseJSONException(ErrorCodes.INVALID_INPUT_PARAMS, "缺少参数");
+        }
+        String userName = user.getName();
+
+        Account account = repository.findAccountByNickName(userName).orElseThrow(()-> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY,"账号不正确"));
+        if(!validPwd(oldPwd, account.getPwd())){
+           throw new BaseJSONException(ErrorCodes.INVALID_OLD_PWD);
+        }
+        account.setPwd(encryptPwd(newPwd));
+        repository.save(account);
         return ResponseObject.success(true);
     }
 }
