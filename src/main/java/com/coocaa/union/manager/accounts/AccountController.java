@@ -180,6 +180,7 @@ public class AccountController extends BaseController {
     @ResponseBody
     public ResponseObject<Set<Role>> userRoles(Integer id) {
         Account account = repository.findById(id).orElseThrow(() -> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
+        logger.info(account.getRoles().toString());
         return ResponseObject.success(account.getRoles());
     }
 
