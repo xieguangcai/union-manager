@@ -5,9 +5,9 @@ logging:
 spring:
   profiles: cc-test
   datasource:
-    url: jdbc:mysql://172.20.135.35:3306/skyid
-    username: skyid
-    password: skyid@)!$
+    url: jdbc:mysql://172.20.135.48:3306/union_role?useUnicode=true&amp;characterEncoding=utf8mb4
+    username: coocaa
+    password: coocaa
     driver-class-name: com.mysql.jdbc.Driver
   redis:
     host: 172.20.135.33
