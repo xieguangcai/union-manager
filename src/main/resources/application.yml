@@ -4,6 +4,7 @@ spring:
     active: cc-test
   jpa:
     show-sql: false
+    open-in-view: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   http:
