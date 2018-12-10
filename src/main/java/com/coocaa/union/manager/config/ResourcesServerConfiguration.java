@@ -36,8 +36,8 @@ public class ResourcesServerConfiguration  extends ResourceServerConfigurerAdapt
         http
                 .authorizeRequests()
                 .antMatchers("/oauth/**").permitAll()
-                .antMatchers("/api/me/changepwd").hasAnyAuthority(Roles.ROLE_VIEW)
-                .antMatchers("/user").hasAnyAuthority(Roles.ROLE_VIEW)
+                .antMatchers("/api/me/changepwd").authenticated()//.hasAnyAuthority(Roles.ROLE_VIEW)
+                .antMatchers("/user").authenticated()//.hasAnyAuthority(Roles.ROLE_VIEW)
                 .antMatchers("/**").hasAnyAuthority(Roles.ROLE_ADMIN)
                 .and()
                 .headers().addHeaderWriter((request, response) -> {
