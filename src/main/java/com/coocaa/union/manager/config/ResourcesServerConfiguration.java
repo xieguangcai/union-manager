@@ -30,8 +30,8 @@ public class ResourcesServerConfiguration  extends ResourceServerConfigurerAdapt
         resources.tokenStore(new CCLettuceRedisTokenStore(redisConnectionFactory));
 
     }
-    @Override
 
+    @Override
     public void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
