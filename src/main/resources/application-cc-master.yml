@@ -4,9 +4,9 @@ logging:
 spring:
   profiles: cc-master
   datasource:
-    url: jdbc:mysql://passport-mysql-master:3306/skyid?useUnicode=true&amp;characterEncoding=utf-8
-    username: skyid
-    password: skyid@)!$
+    url: jdbc:mysql://passport-mysql-master:3306/union_role?useUnicode=true&amp;characterEncoding=utf-8
+    username: role
+    password: sQ2aDnVQqDTutI
     driver-class-name: com.mysql.jdbc.Driver
   redis:
     host: union-redis-master
