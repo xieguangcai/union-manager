@@ -9,8 +9,9 @@ spring:
     password: skyid@)!$
     driver-class-name: com.mysql.jdbc.Driver
   redis:
-    host: passport-redis-master
-    port: 7711
+    host: union-redis-master
+    port: 6379
     jedis:
       pool:
         max-wait: 2000ms
+    password: passunion123

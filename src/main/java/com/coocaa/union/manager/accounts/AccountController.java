@@ -27,6 +27,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -54,6 +55,7 @@ public class AccountController extends BaseController {
         oldEneity.setEmail(account.getEmail());
         oldEneity.setAccountStatus(account.getAccountStatus());
         oldEneity.setDepartment(account.getDepartment());
+        oldEneity.setModifyTime(new Date());
         if (account.getPwd() != null) {
             oldEneity.setPwd(encryptPwd(account.getPwd()));
         }
@@ -74,6 +76,8 @@ public class AccountController extends BaseController {
         if (account.getPwd() != null) {
             account.setPwd(encryptPwd(account.getPwd()));
         }
+        account.setCreateTime(new Date());
+        account.setModifyTime(new Date());
         service.save(account);
         return ResponseObject.success(true);
     }

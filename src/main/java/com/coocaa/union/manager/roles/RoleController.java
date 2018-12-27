@@ -24,6 +24,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -46,6 +47,7 @@ public class RoleController extends BaseController {
         oldEneity.setName(role.getName());
         oldEneity.setRoleKey(role.getRoleKey());
         oldEneity.setStatus(role.getStatus());
+        oldEneity.setModifyTime(new Date());
         if(role.getApplication() !=null && oldEneity.getApplication().getAppId() != role.getApplication().getAppId()){
             oldEneity.setApplication(new Application(role.getApplication().getAppId()));
         }
@@ -58,6 +60,8 @@ public class RoleController extends BaseController {
     @ResponseBody
     public ResponseObject<Boolean> addNew(@RequestBody Role role) {
         role.setRoleId(null);
+        role.setCreateTime(new Date());
+        role.setModifyTime(new Date());
         service.save(role);
         return ResponseObject.success(true);
     }

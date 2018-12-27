@@ -26,6 +26,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -50,6 +51,7 @@ public class ApplicationController extends BaseController {
         oldEneity.setMemo(application.getMemo());
         oldEneity.setStatus(application.getStatus());
         oldEneity.setAppSecret(application.getAppSecret());
+        oldEneity.setModifyTime(new Date());
         service.save(oldEneity);
 
         return ResponseObject.success(true);
@@ -59,6 +61,8 @@ public class ApplicationController extends BaseController {
     @ResponseBody
     public ResponseObject<Boolean> addNew(@RequestBody Application application) {
         application.setAppId(null);
+        application.setCreateTime(new Date());
+        application.setModifyTime(new Date());
         service.save(application);
         return ResponseObject.success(true);
     }
