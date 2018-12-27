@@ -18,7 +18,7 @@ spring:
 #      password: password
 #      name: xgc
 server:
-  port: 8088
+  port: 6088
   tomcat:
     uri-encoding: UTF-8
   servlet:
