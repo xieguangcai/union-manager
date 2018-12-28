@@ -21,6 +21,7 @@ server:
   port: 6088
   tomcat:
     uri-encoding: UTF-8
+    max-threads: 20
   servlet:
     context-path: /ums
 security:
