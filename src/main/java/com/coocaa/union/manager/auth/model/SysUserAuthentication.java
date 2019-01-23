@@ -17,6 +17,14 @@ public class SysUserAuthentication implements UserDetails {
      */
     private String uuid;
     /**
+     * 姓名
+     */
+    private String name;
+    /**
+     * 用户头像
+     */
+    private String avatar;
+    /**
      * 用户名
      */
     private String username;
@@ -44,6 +52,8 @@ public class SysUserAuthentication implements UserDetails {
      * 权限列表
      */
     private Collection<GrantedAuthority> authorities;
+    private String email;
+
     /**
      * ID号
      * @return uuid 
@@ -171,5 +181,28 @@ public class SysUserAuthentication implements UserDetails {
     public void setAuthorities(Collection<GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

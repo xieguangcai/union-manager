@@ -70,6 +70,11 @@ public class BaseUserDetailService implements UserDetailsService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
+        //扩展其他信息
+        user.setEmail(account.getEmail());
+        user.setAvatar("http://img.sky.fs.skysrt.com/passport/N4enSPuwWkHtBOz8zIDQ.jpg");
+
+        user.setName(account.getUserName());
         user.setEnabled(account.getAccountStatus() == 1);
         return user;//返回UserDetails的实现user不为空，则验证通过
     }
