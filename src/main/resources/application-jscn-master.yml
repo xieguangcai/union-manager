@@ -1,0 +1,17 @@
+logging:
+  level:
+    root: info
+spring:
+  profiles: jscn-master
+  datasource:
+    url: jdbc:mysql://passport-mysql-master:3306/union_role?useUnicode=true&amp;characterEncoding=utf-8
+    username: role
+    password: sQ2aDnVQqDTutI
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: union-redis-master
+    port: 6379
+    jedis:
+      pool:
+        max-wait: 2000ms
+    password: passunion123

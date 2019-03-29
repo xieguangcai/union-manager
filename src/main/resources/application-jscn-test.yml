@@ -1,0 +1,17 @@
+debug: true
+logging:
+  level:
+    root: info
+spring:
+  profiles: jscn-test
+  datasource:
+    url: jdbc:mysql://172.20.135.48:3306/union_role?useUnicode=true&amp;characterEncoding=utf8mb4
+    username: coocaa
+    password: coocaa
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 172.20.135.33
+    port: 7711
+    jedis:
+      pool:
+        max-wait: 2000ms
