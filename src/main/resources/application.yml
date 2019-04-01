@@ -11,8 +11,9 @@ spring:
     encoding:
       force: true
   freemarker:
-    enabled: true
     template-loader-path: classpath:/templates/
+    enabled: false
+    check-template-location: false
 #  security:
 #    user:
 #      password: password
