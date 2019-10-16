@@ -48,7 +48,7 @@ public class RoleController extends BaseController {
         oldEneity.setRoleKey(role.getRoleKey());
         oldEneity.setStatus(role.getStatus());
         oldEneity.setModifyTime(new Date());
-        if(role.getApplication() !=null && oldEneity.getApplication().getAppId() != role.getApplication().getAppId()){
+        if(role.getApplication() !=null && oldEneity.getApplication().getAppId().equals(role.getApplication().getAppId()) ){
             oldEneity.setApplication(new Application(role.getApplication().getAppId()));
         }
         service.save(oldEneity);
