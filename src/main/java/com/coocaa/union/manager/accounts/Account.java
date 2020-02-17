@@ -58,7 +58,7 @@ public class Account {
             joinColumns = {@JoinColumn(name = "accountId", referencedColumnName = "account_id")},
             inverseJoinColumns = {@JoinColumn(name = "itemId", referencedColumnName = "item_id")}
     )
-    private Set<DataItems> items = new HashSet<>();
+    private Set<DataItems> dataItems = new HashSet<>();
 
     public Integer getAccountId() {
         return accountId;
@@ -178,5 +178,13 @@ public class Account {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<DataItems> getDataItems() {
+        return dataItems;
+    }
+
+    public void setDataItems(Set<DataItems> dataItems) {
+        this.dataItems = dataItems;
     }
 }
