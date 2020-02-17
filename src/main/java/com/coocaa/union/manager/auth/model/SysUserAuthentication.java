@@ -4,6 +4,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 认证用户主体模型
@@ -54,6 +57,7 @@ public class SysUserAuthentication implements UserDetails {
     private Collection<GrantedAuthority> authorities;
     private String email;
 
+    private Map<String, List<String>> dataItems = new HashMap<>();
     /**
      * ID号
      * @return uuid 
@@ -204,5 +208,13 @@ public class SysUserAuthentication implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public Map<String, List<String>> getDataItems() {
+        return dataItems;
+    }
+
+    public void setDataItems(Map<String, List<String>> dataItems) {
+        this.dataItems = dataItems;
     }
 }

@@ -2,6 +2,7 @@ package com.coocaa.union.manager.auth;
 
 import com.coocaa.union.manager.accounts.Account;
 import com.coocaa.union.manager.accounts.AccountService;
+import com.coocaa.union.manager.accounts.DataItems;
 import com.coocaa.union.manager.auth.model.SysUserAuthentication;
 import com.coocaa.union.manager.roles.Role;
 import org.slf4j.Logger;
@@ -12,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 自定义用户认证Service
@@ -76,6 +75,17 @@ public class BaseUserDetailService implements UserDetailsService {
 
         user.setName(account.getUserName());
         user.setEnabled(account.getAccountStatus() == 1);
+
+        Map<String, List<String>> userDataGroups = new HashMap<>();
+        for(DataItems item: account.getDataItems()) {
+            List<String> itemKeys = userDataGroups.get(item.getDataGroup().getKey());
+            if ( null == itemKeys) {
+                itemKeys = new ArrayList<>();
+                userDataGroups.put(item.getDataGroup().getKey(), itemKeys);
+            }
+            itemKeys.add(item.getValue());
+        }
+        user.setDataItems(userDataGroups);
         return user;//返回UserDetails的实现user不为空，则验证通过
     }
 }
