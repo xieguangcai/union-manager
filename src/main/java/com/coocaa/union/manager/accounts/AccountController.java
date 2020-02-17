@@ -3,6 +3,7 @@ package com.coocaa.union.manager.accounts;
 import com.coocaa.union.manager.BaseController;
 import com.coocaa.union.manager.exception.BaseJSONException;
 import com.coocaa.union.manager.exception.ErrorCodes;
+import com.coocaa.union.manager.roles.Rights;
 import com.coocaa.union.manager.roles.Role;
 import com.coocaa.union.manager.utils.ResponseObject;
 import org.apache.commons.lang3.StringUtils;
@@ -180,18 +181,21 @@ public class AccountController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/user/roles")
+    @RequestMapping(value = "/user/rights")
     @ResponseBody
-    public ResponseObject<Set<Role>> userRoles(Integer id) {
+    public ResponseObject<Rights> userRoles(Integer id) {
         Account account = repository.findById(id).orElseThrow(() -> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
         logger.info(account.getRoles().toString());
-        return ResponseObject.success(account.getRoles());
+        Rights rights = new Rights();
+        rights.setRoles(account.getRoles());
+        rights.setDataItems(account.getDataItems());
+        return ResponseObject.success(rights);
     }
 
-    @RequestMapping(value = "/user/save/roles")
+    @RequestMapping(value = "/user/save/rights")
     @ResponseBody
-    public ResponseObject<Boolean> saveUserRoles(Integer accountId, Integer[] roleIds) {
-        service.saveAccountRole(accountId, roleIds);
+    public ResponseObject<Boolean> saveUserRoles(Integer accountId, Integer[] roleIds, Integer[] userDataItems) {
+        service.saveAccountRole(accountId, roleIds, userDataItems);
         return ResponseObject.success(true);
     }
 

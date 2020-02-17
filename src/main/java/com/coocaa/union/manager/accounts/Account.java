@@ -53,6 +53,10 @@ public class Account {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(targetEntity = DataItems.class, fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH}, mappedBy = "union_data_items")
+    @JoinTable(name = "union_account_data_item")
+    private Set<DataItems> dataItems = new HashSet<>();
+
     public Integer getAccountId() {
         return accountId;
     }
@@ -171,5 +175,13 @@ public class Account {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<DataItems> getDataItems() {
+        return dataItems;
+    }
+
+    public void setDataItems(Set<DataItems> dataItems) {
+        this.dataItems = dataItems;
     }
 }

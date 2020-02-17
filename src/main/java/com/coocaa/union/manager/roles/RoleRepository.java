@@ -9,10 +9,6 @@ import java.util.List;
 
 public interface RoleRepository extends NoCudRepository<Role, Integer> {
 
-    //Page<Role> findByRoleKeyContainsAndNameContainsAndStatus(@Param("roleKey")String roleKey,
-     //                                                         @Param("name") String name,
-     //                                                         @Param("status")Integer status, Pageable pageable);
-
     List<Role> findByStatus(@Param("status")Integer status);
 
 }
