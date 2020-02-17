@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "union_accounts")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler","salt"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler","salt", "roles", "dataItems"})
 public class Account {
     @Id
     @Column(name = "account_id")
