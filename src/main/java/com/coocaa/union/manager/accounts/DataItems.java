@@ -14,7 +14,7 @@ import java.util.Objects;
 @Table(name = "union_data_items", schema = "union_role", catalog = "")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler"})
 public class DataItems {
-    private int id;
+    private int itemId;
     private String value;
     private String text;
     private Integer sortId;
@@ -25,18 +25,18 @@ public class DataItems {
     }
 
     public DataItems(int dataItemId) {
-        this.id = dataItemId;
+        this.itemId = dataItemId;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
+    @Column(name = "item_id", nullable = false)
+    public int getItemId() {
+        return itemId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setItemId(int id) {
+        this.itemId = id;
     }
 
     @Basic
@@ -94,7 +94,7 @@ public class DataItems {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DataItems dataItems = (DataItems) o;
-        return id == dataItems.id &&
+        return itemId == dataItems.itemId &&
                 Objects.equals(value, dataItems.value) &&
                 Objects.equals(text, dataItems.text) &&
                 Objects.equals(sortId, dataItems.sortId) &&
@@ -104,7 +104,7 @@ public class DataItems {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, value, text, sortId, createTime, modifyTime);
+        return Objects.hash(itemId, value, text, sortId, createTime, modifyTime);
     }
 
     private DataGroup dataGroup;
