@@ -104,6 +104,7 @@ public class DataGroup {
 
     @OneToMany(targetEntity = DataItems.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "group_id")
+    @OrderBy("sortId asc ")
     public Set<DataItems> getItems() {
         return items;
     }
