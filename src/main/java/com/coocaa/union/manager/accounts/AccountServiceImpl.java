@@ -11,6 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
+/**
+ * 账号相关service
+ * @author xieguangcai
+ * @date 2020-02-18
+ */
 @Service
 public class AccountServiceImpl extends BaseServiceImpl<Account, Integer> implements AccountService {
 
@@ -21,7 +26,8 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Integer> implem
     protected CrudRepository<Account, Integer> getCrudRepostory() {
         return repository;
     }
-    @Transactional
+
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Account findByNickName(String nickName) {
         Account account = repository.findAccountByNickName(nickName).orElseThrow(()-> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
@@ -30,17 +36,22 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Integer> implem
         return account;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveAccountRole(Integer accountId, Integer[] roleIds, Integer[] userDataItems) {
         Account account = repository.findById(accountId).orElseThrow(() -> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
         account.getRoles().clear();
-        for (Integer roleId : roleIds) {
-            account.getRoles().add(new Role(roleId));
+        if(null != roleIds) {
+            for (Integer roleId : roleIds) {
+                account.getRoles().add(new Role(roleId));
+            }
         }
         account.getDataItems().clear();
-        for (Integer dataItemId: userDataItems) {
-            account.getDataItems().add(new DataItems(dataItemId));
+
+        if( null != userDataItems) {
+            for (Integer dataItemId : userDataItems) {
+                account.getDataItems().add(new DataItems(dataItemId));
+            }
         }
         repository.save(account);
     }
