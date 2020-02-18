@@ -13,7 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "union_data_group", schema = "union_role", catalog = "")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler", "items"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler"})
 public class DataGroup {
     private int id;
     private String key;
