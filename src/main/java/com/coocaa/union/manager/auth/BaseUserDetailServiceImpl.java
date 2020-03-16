@@ -20,15 +20,15 @@ import java.util.*;
  * @author wunaozai
  * @date 2018-06-19
  */
-public class BaseUserDetailService implements UserDetailsService {
+public class BaseUserDetailServiceImpl implements UserDetailsService {
 
 
-    public BaseUserDetailService(AccountService accountService) {
+    public BaseUserDetailServiceImpl(AccountService accountService) {
         this.accountService = accountService;
     }
     AccountService accountService;
 
-    private static final Logger log = LoggerFactory.getLogger(BaseUserDetailService.class);
+    private static final Logger log = LoggerFactory.getLogger(BaseUserDetailServiceImpl.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -12,12 +12,10 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
-import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义客户端认证
@@ -25,9 +23,9 @@ import java.util.concurrent.TimeUnit;
  * @date 2018-06-20
  */
 @Service
-public class BaseClientDetailService implements ClientDetailsService {
+public class BaseClientDetailServiceImpl implements ClientDetailsService {
 
-    private static final Logger log = LoggerFactory.getLogger(BaseClientDetailService.class);
+    private static final Logger log = LoggerFactory.getLogger(BaseClientDetailServiceImpl.class);
 
     @Autowired
     BaseClientDetails clientDetails;

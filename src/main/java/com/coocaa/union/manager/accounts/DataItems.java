@@ -91,8 +91,8 @@ public class DataItems {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()){ return false;}
         DataItems dataItems = (DataItems) o;
         return itemId == dataItems.itemId &&
                 Objects.equals(value, dataItems.value) &&

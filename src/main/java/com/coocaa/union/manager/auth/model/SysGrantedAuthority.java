@@ -18,6 +18,7 @@ public class SysGrantedAuthority  implements GrantedAuthority {
      * 权限
      * @return authority 
      */
+    @Override
     public String getAuthority() {
         return authority;
     }

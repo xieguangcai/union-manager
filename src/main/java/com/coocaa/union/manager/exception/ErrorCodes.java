@@ -8,10 +8,21 @@ import java.util.Map;
  * Created by neo on 14-4-30.
  */
 public enum ErrorCodes {
+    /**
+     * 系统错误
+     */
     SYSTEM_ERROR(1001,"系统错误"),
+    /**
+     * 参数错误
+     */
     INVALID_INPUT_PARAMS(1002,"参数错误：%s"),
-
+    /**
+     * 没有找到实体对象
+     */
     NO_SUCH_ENTITY(1003, "没有找到对象"),
+    /**
+     * 旧密码错误
+     */
     INVALID_OLD_PWD(9001, "旧密码错误"),
 
     ;

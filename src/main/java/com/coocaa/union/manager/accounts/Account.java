@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -186,5 +187,23 @@ public class Account {
 
     public void setDataItems(Set<DataItems> dataItems) {
         this.dataItems = dataItems;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){ return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
+        Account that = (Account) o;
+        return  Objects.equals(accountId, that.accountId) &&
+                Objects.equals(nickName, that.nickName) &&
+                Objects.equals(department, that.department) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(userName, that.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId, nickName, department, email, userName);
     }
 }

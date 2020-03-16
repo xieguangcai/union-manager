@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * 认证用户主体模型
+ * @author xieguangcai
  */
 public class SysUserAuthentication implements UserDetails {
 
@@ -78,6 +79,7 @@ public class SysUserAuthentication implements UserDetails {
      * 用户名
      * @return username 
      */
+    @Override
     public String getUsername() {
         return username;
     }
@@ -94,6 +96,7 @@ public class SysUserAuthentication implements UserDetails {
      * 密码
      * @return password 
      */
+    @Override
     public String getPassword() {
         return password;
     }
@@ -110,6 +113,7 @@ public class SysUserAuthentication implements UserDetails {
      * 账户生效
      * @return accountNonExpired 
      */
+    @Override
     public boolean isAccountNonExpired() {
         return accountNonExpired;
     }
@@ -126,6 +130,7 @@ public class SysUserAuthentication implements UserDetails {
      * 账户锁定
      * @return accountNonLocked 
      */
+    @Override
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
@@ -142,6 +147,7 @@ public class SysUserAuthentication implements UserDetails {
      * 凭证生效
      * @return credentialsNonExpired 
      */
+    @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
     }
@@ -158,6 +164,7 @@ public class SysUserAuthentication implements UserDetails {
      * 激活状态
      * @return enabled 
      */
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -174,6 +181,7 @@ public class SysUserAuthentication implements UserDetails {
      * 权限列表
      * @return authorities 
      */
+    @Override
     public Collection<GrantedAuthority> getAuthorities() {
         return authorities;
     }

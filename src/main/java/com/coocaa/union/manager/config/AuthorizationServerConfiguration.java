@@ -1,6 +1,6 @@
 package com.coocaa.union.manager.config;
 
-import com.coocaa.union.manager.auth.BaseClientDetailService;
+import com.coocaa.union.manager.auth.BaseClientDetailServiceImpl;
 import com.coocaa.union.manager.components.CCLettuceRedisTokenStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
     @Autowired
-    BaseClientDetailService clientDetailService;
+    BaseClientDetailServiceImpl clientDetailService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

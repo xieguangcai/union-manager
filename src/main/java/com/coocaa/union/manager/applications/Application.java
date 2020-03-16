@@ -1,9 +1,11 @@
 package com.coocaa.union.manager.applications;
 
+import com.coocaa.union.manager.accounts.Account;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "union_applications")
@@ -105,5 +107,20 @@ public class Application {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){ return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
+        Application that = (Application) o;
+        return  Objects.equals(appId, that.appId) &&
+                Objects.equals(appKey, that.appKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(appId, appKey);
     }
 }

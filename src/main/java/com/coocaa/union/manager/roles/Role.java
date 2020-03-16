@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "union_roles")
@@ -90,5 +91,20 @@ public class Role {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){ return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
+        Role that = (Role) o;
+        return  Objects.equals(roleId, that.roleId) &&
+                Objects.equals(roleKey, that.roleKey) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roleId, roleKey, name);
     }
 }
