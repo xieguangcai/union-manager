@@ -1,5 +1,6 @@
 package com.coocaa.union.manager.config;
 
+import com.coocaa.magazine.utils.LdapUtil;
 import com.coocaa.union.manager.accounts.AccountService;
 import com.coocaa.union.manager.auth.BaseUserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     AccountService accountService;
+    @Autowired
+    LdapUtil ldapUtil;
+
+
     //通过自定义userDetailsService 来实现查询数据库，手机，二维码等多种验证方式
     @Bean
     @Override
     protected UserDetailsService userDetailsService(){
         //采用一个自定义的实现UserDetailsService接口的类
-        return new BaseUserDetailServiceImpl(accountService);
+        return new BaseUserDetailServiceImpl(accountService, ldapUtil);
     }
 
     @Override

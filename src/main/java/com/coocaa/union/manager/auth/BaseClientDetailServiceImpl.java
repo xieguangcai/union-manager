@@ -1,5 +1,9 @@
 package com.coocaa.union.manager.auth;
 
+import com.coocaa.union.manager.applications.Application;
+import com.coocaa.union.manager.applications.ApplicationService;
+import com.coocaa.union.manager.exception.BaseJSONException;
+import com.coocaa.union.manager.exception.ErrorCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +32,29 @@ public class BaseClientDetailServiceImpl implements ClientDetailsService {
     private static final Logger log = LoggerFactory.getLogger(BaseClientDetailServiceImpl.class);
 
     @Autowired
+    ApplicationService applicationService;
+
+    @Autowired
     BaseClientDetails clientDetails;
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         System.out.println(clientId);
+        BaseClientDetails client = null;
+
+        Application application = applicationService.findByAppKey(clientId);
+        if(null == application) {
+            throw new BaseJSONException(ErrorCodes.NO_CLIENTID);
+        }
+        if(application.getStatus() != 1) {
+            throw new BaseJSONException(ErrorCodes.CLIENT_ID_INVALID, application.getAppKey());
+        }
+        client = new BaseClientDetails();
+        client.setClientId(application.getAppKey());
+        client.setClientSecret("{noop}" + application.getAppSecret());
+        client.setAuthorizedGrantTypes(Arrays.asList("authorization_code", "password", "refresh_token"));
+        client.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList("ALL"));
+        client.setRegisteredRedirectUri(Collections.emptySet());
+        return client;
 //        BaseClientDetails client = null;
         //这里可以改为查询数据库
 //        if("client".equals(clientId)) {
@@ -54,8 +77,8 @@ public class BaseClientDetailServiceImpl implements ClientDetailsService {
 //        if(client == null) {
 //            throw new NoSuchClientException("No client width requested id: " + clientId);
 //        }
-        return clientDetails;
 //        return client;
+//        return clientDetails;
     }
 
     @Configuration

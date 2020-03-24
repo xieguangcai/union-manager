@@ -32,7 +32,7 @@ security:
       token-key-access: isAuthenticated()
       check-token-access: permitAll()
     client:
-      clientId: acme
+      clientId: a810aa0e8ffcf7a2
       clientSecret: '{noop}a810aa0e8ffcf7a2c0827ace79fea89d'
       authorized-grant-types: authorization_code,refresh_token,password
       scope: select,all

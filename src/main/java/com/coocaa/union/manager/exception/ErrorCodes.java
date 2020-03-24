@@ -24,7 +24,17 @@ public enum ErrorCodes {
      * 旧密码错误
      */
     INVALID_OLD_PWD(9001, "旧密码错误"),
+    /**
+     * appKey已经存在
+     */
+    INVALID_APP_KEY(2001, "appKey已经存在。"),
 
+    /**
+     * AppKey 不存在
+     */
+    NO_CLIENTID(2002, "AppKey 不存在"),
+    CLIENT_ID_INVALID(2002, "接入系统已被禁用，请联系管理员。%s"),
+    LADP_ACCOUNT_NOT_EDIT(2003, "域账号不允许编辑"),
     ;
 
     Integer code;

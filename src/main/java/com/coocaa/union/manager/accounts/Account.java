@@ -29,6 +29,9 @@ public class Account {
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
 
+    /**
+     * 1、正常 2、禁用 3、未审核
+     */
     @Column(name = "account_status", nullable = false)
     private Integer accountStatus;
 
@@ -36,7 +39,6 @@ public class Account {
 
     @Column(name = "last_login_ip")
     private String lastLoginIp;
-
     private String email;
     private String department;
     private String memo;
@@ -47,17 +49,23 @@ public class Account {
     private Date createTime;
     @Column(name = "modify_time", updatable = false)
     private Date modifyTime;
+    /**
+     * 1 为本系统内部创建的账号
+     * 2 为域账号创建的账号
+     */
+    @Column(name = "type")
+    private Integer type = 1;
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "union_account_role",
-            joinColumns = {@JoinColumn(name = "accountId", referencedColumnName = "account_id")},
-            inverseJoinColumns = {@JoinColumn(name = "roleId", referencedColumnName = "role_id")}
+            joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "account_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")}
     )
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(targetEntity = DataItems.class, fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "union_account_data_item",
-            joinColumns = {@JoinColumn(name = "accountId", referencedColumnName = "account_id")},
-            inverseJoinColumns = {@JoinColumn(name = "itemId", referencedColumnName = "item_id")}
+            joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "account_id")},
+            inverseJoinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "item_id")}
     )
     private Set<DataItems> dataItems = new HashSet<>();
 
@@ -189,6 +197,13 @@ public class Account {
         this.dataItems = dataItems;
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -199,11 +214,12 @@ public class Account {
                 Objects.equals(nickName, that.nickName) &&
                 Objects.equals(department, that.department) &&
                 Objects.equals(email, that.email) &&
-                Objects.equals(userName, that.userName);
+                Objects.equals(userName, that.userName) &&
+                Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, nickName, department, email, userName);
+        return Objects.hash(accountId, nickName, department, email, userName, type);
     }
 }

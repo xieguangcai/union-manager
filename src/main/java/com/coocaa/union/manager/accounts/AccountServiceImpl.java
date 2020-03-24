@@ -4,6 +4,7 @@ import com.coocaa.union.manager.BaseServiceImpl;
 import com.coocaa.union.manager.exception.BaseJSONException;
 import com.coocaa.union.manager.exception.ErrorCodes;
 import com.coocaa.union.manager.roles.Role;
+import com.novell.ldap.LDAPEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,10 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Integer> implem
             }
         }
         repository.save(account);
+    }
+
+    @Override
+    public Account createNew(LDAPEntry entry) {
+        return null;
     }
 }

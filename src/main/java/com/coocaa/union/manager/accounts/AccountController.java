@@ -51,14 +51,19 @@ public class AccountController extends BaseController {
             throw new BaseJSONException(ErrorCodes.INVALID_INPUT_PARAMS, "accountId 无效");
         }
         Account oldEneity = repository.findById(account.getAccountId()).orElseThrow(() -> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
-        oldEneity.setNickName(account.getNickName());
-        oldEneity.setUserName(account.getUserName());
-        oldEneity.setEmail(account.getEmail());
-        oldEneity.setAccountStatus(account.getAccountStatus());
-        oldEneity.setDepartment(account.getDepartment());
-        oldEneity.setModifyTime(new Date());
-        if (account.getPwd() != null) {
-            oldEneity.setPwd(encryptPwd(account.getPwd()));
+        //域账号只允许修改状态。
+        if(oldEneity.getType() == 2) {
+            oldEneity.setAccountStatus(account.getAccountStatus());
+        } else {
+            oldEneity.setNickName(account.getNickName());
+            oldEneity.setUserName(account.getUserName());
+            oldEneity.setEmail(account.getEmail());
+            oldEneity.setAccountStatus(account.getAccountStatus());
+            oldEneity.setDepartment(account.getDepartment());
+            oldEneity.setModifyTime(new Date());
+            if (account.getPwd() != null) {
+                oldEneity.setPwd(encryptPwd(account.getPwd()));
+            }
         }
         service.save(oldEneity);
         return ResponseObject.success(true);

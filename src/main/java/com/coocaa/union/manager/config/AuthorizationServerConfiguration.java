@@ -76,7 +76,10 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         endpoints.tokenStore(new CCLettuceRedisTokenStore(redisConnectionFactory))
                  .authenticationManager(authenticationManager)
                  .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
-        
+//        if(endpoints.getTokenGranter() instanceof CompositeTokenGranter){
+//            CompositeTokenGranter granter = (CompositeTokenGranter) endpoints.getTokenGranter();
+//            granter.addTokenGranter(LdapTokenGranter());
+//        }
         //配置TokenService参数
         DefaultTokenServices tokenService = new DefaultTokenServices();
         tokenService.setTokenStore(endpoints.getTokenStore());

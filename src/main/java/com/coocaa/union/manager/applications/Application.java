@@ -1,6 +1,5 @@
 package com.coocaa.union.manager.applications;
 
-import com.coocaa.union.manager.accounts.Account;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;

@@ -1,10 +1,13 @@
 package com.coocaa.union.manager.auth;
 
+import com.coocaa.magazine.utils.LdapUtil;
 import com.coocaa.union.manager.accounts.Account;
 import com.coocaa.union.manager.accounts.AccountService;
 import com.coocaa.union.manager.accounts.DataItems;
 import com.coocaa.union.manager.auth.model.SysUserAuthentication;
 import com.coocaa.union.manager.roles.Role;
+import com.coocaa.union.manager.utils.HttpContextUtils;
+import com.novell.ldap.LDAPEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,47 +25,45 @@ import java.util.*;
  */
 public class BaseUserDetailServiceImpl implements UserDetailsService {
 
-
-    public BaseUserDetailServiceImpl(AccountService accountService) {
-        this.accountService = accountService;
-    }
     AccountService accountService;
+    LdapUtil ldapUtil;
+    public BaseUserDetailServiceImpl(AccountService accountService, LdapUtil ldapUtil) {
+        this.accountService = accountService;
+        this.ldapUtil = ldapUtil;
+    }
 
     private static final Logger log = LoggerFactory.getLogger(BaseUserDetailServiceImpl.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
-        System.out.println(username);
         SysUserAuthentication user = null;
 
         Account account = accountService.findByNickName(username);
 
-//        if("admin".equals(username)) {
-//            //这里可以通过auth 获取 user 值
-//            //然后根据当前登录方式type 然后创建一个sysuserauthentication 重新设置 username 和 password
-//            //比如使用手机验证码登录的， username就是手机号 password就是6位的验证码{noop}000000
-//            List<GrantedAuthority> list = AuthorityUtils.createAuthorityList("admin_role"); //所谓的角色，只是增加ROLE_前缀
-//            user = new SysUserAuthentication();
-//            user.setUsername(username);
-//            user.setPassword("{noop}123456");
-//            user.setAuthorities(list);
-//            user.setAccountNonExpired(true);
-//            user.setAccountNonLocked(true);
-//            user.setCredentialsNonExpired(true);
-//            user.setEnabled(true);
-//
-//            //user = new User(username, "{noop}123456", list);
-//        }
+        if(account == null){
+            LDAPEntry entry = getLDAPUserInfo(username);
+            //创建本地账号
+            account = accountService.createNew(entry);
+        } else if (account.getType() == 2) {
+            //域账号验证密码
+            LDAPEntry entry = getLDAPUserInfo(username);
+        }
 
         user = new SysUserAuthentication();
         user.setUsername(username);
         user.setPassword("{bcrypt}" + account.getPwd());
         //用户角色
-
         Set<String> roleKey = new HashSet<>();
-        for (Role role:account.getRoles()){
-            roleKey.add(role.getRoleKey());
+        if(account.getAccountStatus() == 1) {
+            for (Role role : account.getRoles()) {
+                roleKey.add(role.getRoleKey());
+            }
+        } else {
+            if( account.getType() == 2 && account.getAccountStatus() == 3) {
+                //域账号未审核通过的
+                roleKey.add("ROLE_NEW_LDAP_USER");
+            }
         }
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roleKey.toArray(new String[]{}));
         user.setAuthorities(authorities);
@@ -72,20 +73,33 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
         //扩展其他信息
         user.setEmail(account.getEmail());
         user.setAvatar("http://img.sky.fs.skysrt.com/passport/N4enSPuwWkHtBOz8zIDQ.jpg");
-
         user.setName(account.getUserName());
-        user.setEnabled(account.getAccountStatus() == 1);
+        user.setEnabled(account.getAccountStatus() == 1 || (account.getType() == 2 && account.getAccountStatus() != 2));
 
-        Map<String, List<String>> userDataGroups = new HashMap<>();
-        for(DataItems item: account.getDataItems()) {
-            List<String> itemKeys = userDataGroups.get(item.getDataGroup().getKey());
-            if ( null == itemKeys) {
-                itemKeys = new ArrayList<>();
-                userDataGroups.put(item.getDataGroup().getKey(), itemKeys);
+        if(account.getAccountStatus() == 1) {
+            Map<String, List<String>> userDataGroups = new HashMap<>();
+            for (DataItems item : account.getDataItems()) {
+                List<String> itemKeys = userDataGroups.get(item.getDataGroup().getKey());
+                if (null == itemKeys) {
+                    itemKeys = new ArrayList<>();
+                    userDataGroups.put(item.getDataGroup().getKey(), itemKeys);
+                }
+                itemKeys.add(item.getValue());
             }
-            itemKeys.add(item.getValue());
+            user.setDataItems(userDataGroups);
         }
-        user.setDataItems(userDataGroups);
         return user;//返回UserDetails的实现user不为空，则验证通过
+    }
+
+
+    private LDAPEntry getLDAPUserInfo(String username) throws UsernameNotFoundException {
+        String password = HttpContextUtils.getHttpServletRequest().getParameter("password");
+        LDAPEntry userEntity = this.ldapUtil.getUserInfo(username, password);
+        //从域账号获取
+        if(userEntity == null){
+            throw new UsernameNotFoundException(username);
+        }
+        log.info("获取到的域账号信息为：" + userEntity);
+        return userEntity;
     }
 }

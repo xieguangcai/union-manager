@@ -45,7 +45,13 @@ public class ApplicationController extends BaseController {
         if (application.getAppId() == null) {
             throw new BaseJSONException(ErrorCodes.INVALID_INPUT_PARAMS, "ApplicationId 无效");
         }
+
         Application oldEneity = repository.findById(application.getAppId()).orElseThrow(() -> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY));
+        Application key = repository.findByAppKey(application.getAppKey()).orElse(null);
+        if(null != key && !key.getAppId().equals(oldEneity.getAppId())) {
+            throw new BaseJSONException(ErrorCodes.INVALID_APP_KEY);
+        }
+
         oldEneity.setName(application.getName());
         oldEneity.setAppKey(application.getAppKey());
         oldEneity.setMemo(application.getMemo());
@@ -60,6 +66,10 @@ public class ApplicationController extends BaseController {
     @RequestMapping(value = {"/new"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResponseObject<Boolean> addNew(@RequestBody Application application) {
+        Application key = repository.findByAppKey(application.getAppKey()).orElse(null);
+        if(null != key) {
+            throw new BaseJSONException(ErrorCodes.INVALID_APP_KEY);
+        }
         application.setAppId(null);
         application.setCreateTime(new Date());
         application.setModifyTime(new Date());
