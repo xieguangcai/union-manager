@@ -4,6 +4,8 @@ import com.coocaa.magazine.utils.LdapUtil;
 import com.coocaa.union.manager.accounts.Account;
 import com.coocaa.union.manager.accounts.AccountService;
 import com.coocaa.union.manager.accounts.DataItems;
+import com.coocaa.union.manager.applications.Application;
+import com.coocaa.union.manager.applications.ApplicationService;
 import com.coocaa.union.manager.auth.model.SysUserAuthentication;
 import com.coocaa.union.manager.models.Roles;
 import com.coocaa.union.manager.roles.Role;
@@ -29,11 +31,15 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     AccountService accountService;
+    ApplicationService applicationService;
     LdapUtil ldapUtil;
 
-    public BaseUserDetailServiceImpl(AccountService accountService, LdapUtil ldapUtil) {
+    public BaseUserDetailServiceImpl(AccountService accountService,
+                                     LdapUtil ldapUtil,
+                                     ApplicationService applicationService) {
         this.accountService = accountService;
         this.ldapUtil = ldapUtil;
+        this.applicationService = applicationService;
     }
     private static final Logger log = LoggerFactory.getLogger(BaseUserDetailServiceImpl.class);
 
@@ -58,13 +64,22 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
             LDAPEntry entry = getLDAPUserInfo(username, password);
         }
 
+        String appKey = HttpContextUtils.getHttpServletRequest().getParameter("client_id");
+        Application application = applicationService.findByAppKey(appKey);
+
         user = new SysUserAuthentication();
         user.setUsername(username);
         //用户角色
         Set<String> roleKey = new HashSet<>();
         if(account.getAccountStatus() == 1) {
             for (Role role : account.getRoles()) {
-                roleKey.add(role.getRoleKey());
+                //过滤出当前接入系统掉角色
+                if(role.getApplication().getAppId().equals(application.getAppId())) {
+                    roleKey.add(role.getRoleKey());
+                }
+            }
+            if(roleKey.size() == 0){
+                roleKey.add(Roles.ROLE_NEW_LDAP_USER);
             }
         } else {
             if( account.getType() == 2 && account.getAccountStatus() == 3) {
@@ -93,6 +108,9 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
         if(account.getAccountStatus() == 1) {
             Map<String, List<String>> userDataGroups = new HashMap<>();
             for (DataItems item : account.getDataItems()) {
+                if(!item.getDataGroup().getAppId().equals(application.getAppId())) {
+                    continue;
+                }
                 List<String> itemKeys = userDataGroups.get(item.getDataGroup().getKey());
                 if (null == itemKeys) {
                     itemKeys = new ArrayList<>();
