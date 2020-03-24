@@ -78,9 +78,11 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Integer> implem
            }
            depart = StringUtils.join(ousName, "-");
         }
+        account.setDepartment(depart);
         account.setNickName(entry.getAttribute("userPrincipalName").getStringValue());
         account.setEmail(entry.getAttribute("mail").getStringValue());
         account.setUserName(entry.getAttribute("name").getStringValue());
+        account.setType(2);
         return repository.save(account);
     }
 }

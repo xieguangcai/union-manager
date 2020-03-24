@@ -22,4 +22,9 @@ public class Roles {
      */
     public static final String ROLE_EXPORT = "ROLE_EXPORT";
 
+    /**
+     * 从 域账号创建的新账号。
+     */
+    public static final String ROLE_NEW_LDAP_USER = "ROLE_NEW_LDAP_USER";
+
 }

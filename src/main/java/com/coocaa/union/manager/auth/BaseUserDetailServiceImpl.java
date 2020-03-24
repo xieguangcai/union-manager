@@ -5,6 +5,7 @@ import com.coocaa.union.manager.accounts.Account;
 import com.coocaa.union.manager.accounts.AccountService;
 import com.coocaa.union.manager.accounts.DataItems;
 import com.coocaa.union.manager.auth.model.SysUserAuthentication;
+import com.coocaa.union.manager.models.Roles;
 import com.coocaa.union.manager.roles.Role;
 import com.coocaa.union.manager.utils.HttpContextUtils;
 import com.novell.ldap.LDAPEntry;
@@ -15,6 +16,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.*;
 
@@ -24,14 +26,15 @@ import java.util.*;
  * @date 2018-06-19
  */
 public class BaseUserDetailServiceImpl implements UserDetailsService {
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     AccountService accountService;
     LdapUtil ldapUtil;
+
     public BaseUserDetailServiceImpl(AccountService accountService, LdapUtil ldapUtil) {
         this.accountService = accountService;
         this.ldapUtil = ldapUtil;
     }
-
     private static final Logger log = LoggerFactory.getLogger(BaseUserDetailServiceImpl.class);
 
     @Override
@@ -66,13 +69,13 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
         } else {
             if( account.getType() == 2 && account.getAccountStatus() == 3) {
                 //域账号未审核通过的
-                roleKey.add("ROLE_NEW_LDAP_USER");
+                roleKey.add(Roles.ROLE_NEW_LDAP_USER);
             }
         }
-
         if(account.getType() == 2) {
             //如果是ldap账号，修改密码规则。
-            user.setPassword("{noop}" + password);
+            String encryptPwd = encoder.encode(password);
+            user.setPassword("{bcrypt}" + encryptPwd);
         }else {
             user.setPassword("{bcrypt}" + account.getPwd());
         }
