@@ -10,7 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * 账号相关service
@@ -59,6 +59,34 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Integer> implem
 
     @Override
     public Account createNew(LDAPEntry entry) {
+        Account account = new Account();
+        account.setCreateTime(new Date());
+        account.setModifyTime(new Date());
+        account.setAccountStatus(3);
+//        logger.info(entry.getAttribute("userPrincipalName").getStringValue());
+//        logger.info(entry.getAttribute("name").getStringValue());
+//        logger.info(entry.getAttribute("mail").getStringValue());
+//        logger.info(entry.getDN());
+//        String[] ous = entry.getDN().split(",");
+//        String depart = entry.getDN();
+//        if(ous.length >= 4) {
+//           List<String> ousName  = new ArrayList<>();
+//           for (int end = 1, start = ous.length - 4 ; start >= end; start -- ){
+//               String[] x = ous[start].split("=");
+//               if(x.length >= 2) {
+//                   ousName.add(ous[start].split("=")[1]);
+//               }else {
+//                   ousName.add(ous[start]);
+//               }
+//           }
+//           depart = StringUtils.join(ousName, "-");
+//        }
+//        logger.info(depart);
+        account.setNickName(entry.getAttribute("userPrincipalName").getStringValue());
+        account.setEmail(entry.getAttribute("mail").getStringValue());
+        account.setUserName(entry.getAttribute("name").getStringValue());
+
         return null;
+//        return account;
     }
 }

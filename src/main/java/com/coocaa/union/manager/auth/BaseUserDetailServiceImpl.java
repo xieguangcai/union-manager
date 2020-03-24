@@ -38,21 +38,25 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
         SysUserAuthentication user = null;
-
-        Account account = accountService.findByNickName(username);
+        String password = HttpContextUtils.getHttpServletRequest().getParameter("password");
+        Account account = null;
+        try {
+            account = accountService.findByNickName(username);
+        }catch (Exception ex) {
+            log.info("找不到账号信息:" + username);
+        }
 
         if(account == null){
-            LDAPEntry entry = getLDAPUserInfo(username);
+            LDAPEntry entry = getLDAPUserInfo(username, password);
             //创建本地账号
             account = accountService.createNew(entry);
         } else if (account.getType() == 2) {
             //域账号验证密码
-            LDAPEntry entry = getLDAPUserInfo(username);
+            LDAPEntry entry = getLDAPUserInfo(username, password);
         }
 
         user = new SysUserAuthentication();
         user.setUsername(username);
-        user.setPassword("{bcrypt}" + account.getPwd());
         //用户角色
         Set<String> roleKey = new HashSet<>();
         if(account.getAccountStatus() == 1) {
@@ -64,6 +68,13 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
                 //域账号未审核通过的
                 roleKey.add("ROLE_NEW_LDAP_USER");
             }
+        }
+
+        if(account.getType() == 2) {
+            //如果是ldap账号，修改密码规则。
+            user.setPassword("{noop}" + password);
+        }else {
+            user.setPassword("{bcrypt}" + account.getPwd());
         }
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roleKey.toArray(new String[]{}));
         user.setAuthorities(authorities);
@@ -92,8 +103,7 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
     }
 
 
-    private LDAPEntry getLDAPUserInfo(String username) throws UsernameNotFoundException {
-        String password = HttpContextUtils.getHttpServletRequest().getParameter("password");
+    private LDAPEntry getLDAPUserInfo(String username, String password) throws UsernameNotFoundException {
         LDAPEntry userEntity = this.ldapUtil.getUserInfo(username, password);
         //从域账号获取
         if(userEntity == null){
