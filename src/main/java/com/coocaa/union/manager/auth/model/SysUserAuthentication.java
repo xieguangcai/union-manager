@@ -57,6 +57,10 @@ public class SysUserAuthentication implements UserDetails {
      */
     private Collection<GrantedAuthority> authorities;
     private String email;
+    /**
+     * 授权应用的appId
+     */
+    private Integer appId;
 
     private Map<String, List<String>> dataItems = new HashMap<>();
     /**
@@ -224,5 +228,14 @@ public class SysUserAuthentication implements UserDetails {
 
     public void setDataItems(Map<String, List<String>> dataItems) {
         this.dataItems = dataItems;
+    }
+
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
     }
 }

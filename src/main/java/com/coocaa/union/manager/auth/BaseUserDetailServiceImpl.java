@@ -69,6 +69,8 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
 
         user = new SysUserAuthentication();
         user.setUsername(username);
+        user.setUuid(String.valueOf(account.getAccountId()));
+        user.setAppId(application.getAppId());
         //用户角色
         Set<String> roleKey = new HashSet<>();
         if(account.getAccountStatus() == 1) {
@@ -78,14 +80,9 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
                     roleKey.add(role.getRoleKey());
                 }
             }
-            if(roleKey.size() == 0){
-                roleKey.add(Roles.ROLE_NEW_LDAP_USER);
-            }
-        } else {
-            if( account.getType() == 2 && account.getAccountStatus() == 3) {
-                //域账号未审核通过的
-                roleKey.add(Roles.ROLE_NEW_LDAP_USER);
-            }
+        }
+        if(roleKey.size() == 0){
+            roleKey.add(Roles.ROLE_NEW_LDAP_USER);
         }
         if(account.getType() == 2) {
             //如果是ldap账号，修改密码规则。
@@ -103,7 +100,7 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
         user.setEmail(account.getEmail());
         user.setAvatar("http://img.sky.fs.skysrt.com/passport/N4enSPuwWkHtBOz8zIDQ.jpg");
         user.setName(account.getUserName());
-        user.setEnabled(account.getAccountStatus() == 1 || (account.getType() == 2 && account.getAccountStatus() != 2));
+        user.setEnabled(account.getAccountStatus() == 1);
 
         if(account.getAccountStatus() == 1) {
             Map<String, List<String>> userDataGroups = new HashMap<>();

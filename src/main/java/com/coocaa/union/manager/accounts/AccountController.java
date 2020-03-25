@@ -214,6 +214,9 @@ public class AccountController extends BaseController {
         String userName = user.getName();
 
         Account account = repository.findAccountByNickName(userName).orElseThrow(()-> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY,"账号不正确"));
+        if(account.getType() == 2) {
+            throw new BaseJSONException(ErrorCodes.LADP_ACCOUNT_NOT_CHANGE_PWD);
+        }
         if(!validPwd(oldPwd, account.getPwd())){
            throw new BaseJSONException(ErrorCodes.INVALID_OLD_PWD);
         }
@@ -221,4 +224,53 @@ public class AccountController extends BaseController {
         repository.save(account);
         return ResponseObject.success(true);
     }
+
+    @RequestMapping(value = "/user/save/rights/apply")
+    @ResponseBody
+    public ResponseObject<Boolean> saveUserRoles(Principal user, Integer[] roleIds, Integer[] userDataItems) {
+        String userName = user.getName();
+        Account account = repository.findAccountByNickName(userName).orElseThrow(()-> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY,"账号不正确"));
+        service.saveAccountRoleApply(account, roleIds, userDataItems);
+        return ResponseObject.success(true);
+    }
+
+    /**
+     * 获取用户申请的权限列表
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/user/rights/apply")
+    @ResponseBody
+    public ResponseObject<Rights> userRoles(Principal user) {
+        String userName = user.getName();
+        Account account = repository.findAccountByNickName(userName).orElseThrow(()-> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY,"账号不正确"));
+        Rights rights = new Rights();
+        rights.setRoles(account.getRolesApply());
+        rights.setDataItems(account.getDataItemsApply());
+        return ResponseObject.success(rights);
+    }
+
+    /**
+     * 获取用户申请的权限列表
+     * @param accountId
+     * @return
+     */
+    @RequestMapping(value = "/user/rights/apply/admin")
+    @ResponseBody
+    public ResponseObject<Rights> userRolesApplyAdmin(Integer accountId) {
+        Account account = repository.findById(accountId).orElseThrow(()-> new BaseJSONException(ErrorCodes.NO_SUCH_ENTITY,"账号不正确"));
+        Rights rights = new Rights();
+        rights.setRoles(account.getRolesApply());
+        rights.setDataItems(account.getDataItemsApply());
+        return ResponseObject.success(rights);
+    }
+
+    @RequestMapping(value = "/user/save/rights/apply/admin")
+    @ResponseBody
+    public ResponseObject<Boolean> saveUserRolesApplyAdmin(Integer accountId, Integer[] roleIds, Integer[] userDataItems) {
+        service.saveAccountRoleApplyAdmin(accountId, roleIds, userDataItems);
+        return ResponseObject.success(true);
+    }
+
+
 }

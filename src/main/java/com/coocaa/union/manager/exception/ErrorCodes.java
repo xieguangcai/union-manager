@@ -35,6 +35,7 @@ public enum ErrorCodes {
     NO_CLIENTID(2002, "AppKey 不存在"),
     CLIENT_ID_INVALID(2002, "接入系统已被禁用，请联系管理员。%s"),
     LADP_ACCOUNT_NOT_EDIT(2003, "域账号不允许编辑"),
+    LADP_ACCOUNT_NOT_CHANGE_PWD(2004, "请使用域管理平台修改域账号密码"),
     ;
 
     Integer code;

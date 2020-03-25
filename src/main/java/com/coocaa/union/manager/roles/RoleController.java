@@ -23,9 +23,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/api/role/")
@@ -35,7 +37,6 @@ public class RoleController extends BaseController {
     RoleRepository repository;
     @Autowired
     RoleService service;
-
 
     @RequestMapping(value = {"/update"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
@@ -125,10 +126,26 @@ public class RoleController extends BaseController {
 
     @RequestMapping(value = {"valid/list"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public ResponseObject<List<Role>> list(
-    ) {
+    public ResponseObject<List<Role>> list() {
         List<Role> a = repository.findByStatus(1);
         return ResponseObject.success(a);
     }
+
+    /**
+     * 查询接入应用所拥有的权限。
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = {"valid/list/client"}, method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public ResponseObject<List<Role>> list(Principal user) {
+        Integer appId = getAppId(user);
+
+        List<Role> a = repository.findByStatus(1);
+        List<Role> result = a.stream().filter(role -> role.getApplication().getAppId().equals(appId)).collect(Collectors.toList());
+        return ResponseObject.success(result);
+    }
+
+
 
 }

@@ -14,7 +14,7 @@ import java.util.Objects;
 @Table(name = "union_data_items", schema = "union_role", catalog = "")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler", "dataGroup"})
 public class DataItems {
-    private int itemId;
+    private Integer itemId;
     private String value;
     private String text;
     private Integer sortId;
@@ -24,18 +24,18 @@ public class DataItems {
     public DataItems() {
     }
 
-    public DataItems(int dataItemId) {
+    public DataItems(Integer dataItemId) {
         this.itemId = dataItemId;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id", nullable = false)
-    public int getItemId() {
+    public Integer getItemId() {
         return itemId;
     }
 
-    public void setItemId(int id) {
+    public void setItemId(Integer id) {
         this.itemId = id;
     }
 
@@ -94,7 +94,7 @@ public class DataItems {
         if (this == o) {return true;}
         if (o == null || getClass() != o.getClass()){ return false;}
         DataItems dataItems = (DataItems) o;
-        return itemId == dataItems.itemId &&
+        return Objects.equals(itemId, dataItems.itemId) &&
                 Objects.equals(value, dataItems.value) &&
                 Objects.equals(text, dataItems.text) &&
                 Objects.equals(sortId, dataItems.sortId) &&

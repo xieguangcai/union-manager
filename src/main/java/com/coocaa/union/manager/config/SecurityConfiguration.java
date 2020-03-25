@@ -2,6 +2,7 @@ package com.coocaa.union.manager.config;
 
 import com.coocaa.magazine.utils.LdapUtil;
 import com.coocaa.union.manager.accounts.AccountService;
+import com.coocaa.union.manager.applications.ApplicationService;
 import com.coocaa.union.manager.auth.BaseUserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     AccountService accountService;
     @Autowired
+    ApplicationService applicationService;
+    @Autowired
     LdapUtil ldapUtil;
 
 
@@ -34,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected UserDetailsService userDetailsService(){
         //采用一个自定义的实现UserDetailsService接口的类
-        return new BaseUserDetailServiceImpl(accountService, ldapUtil);
+        return new BaseUserDetailServiceImpl(accountService, ldapUtil, applicationService);
     }
 
     @Override

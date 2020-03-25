@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "union_accounts")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler","salt", "roles", "dataItems"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler","salt", "roles", "dataItems","rolesApply","dataItemsApply"})
 public class Account {
     @Id
     @Column(name = "account_id")
@@ -30,7 +30,7 @@ public class Account {
     private String userName;
 
     /**
-     * 1、正常 2、禁用 3、未审核
+     * 1、正常 2、禁用
      */
     @Column(name = "account_status", nullable = false)
     private Integer accountStatus;
@@ -55,6 +55,9 @@ public class Account {
      */
     @Column(name = "type")
     private Integer type = 1;
+    @Column(name = "apply_new_role")
+    private Integer applyNewRole = 0;
+
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "union_account_role",
             joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "account_id")},
@@ -68,6 +71,20 @@ public class Account {
             inverseJoinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "item_id")}
     )
     private Set<DataItems> dataItems = new HashSet<>();
+
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
+    @JoinTable(name = "union_account_role_apply",
+            joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "account_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")}
+    )
+    private Set<Role> rolesApply = new HashSet<>();
+
+    @ManyToMany(targetEntity = DataItems.class, fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
+    @JoinTable(name = "union_account_data_item_apply",
+            joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "account_id")},
+            inverseJoinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "item_id")}
+    )
+    private Set<DataItems> dataItemsApply = new HashSet<>();
 
     public Integer getAccountId() {
         return accountId;
@@ -205,6 +222,30 @@ public class Account {
         this.type = type;
     }
 
+    public Set<Role> getRolesApply() {
+        return rolesApply;
+    }
+
+    public void setRolesApply(Set<Role> rolesApply) {
+        this.rolesApply = rolesApply;
+    }
+
+    public Set<DataItems> getDataItemsApply() {
+        return dataItemsApply;
+    }
+
+    public void setDataItemsApply(Set<DataItems> dataItemsApply) {
+        this.dataItemsApply = dataItemsApply;
+    }
+
+    public Integer getApplyNewRole() {
+        return applyNewRole;
+    }
+
+    public void setApplyNewRole(Integer applyNewRole) {
+        this.applyNewRole = applyNewRole;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o){ return true;}
@@ -215,11 +256,12 @@ public class Account {
                 Objects.equals(department, that.department) &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(userName, that.userName) &&
-                Objects.equals(type, that.type);
+                Objects.equals(type, that.type) &&
+                Objects.equals(applyNewRole, that.applyNewRole);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, nickName, department, email, userName, type);
+        return Objects.hash(accountId, nickName, department, email, userName, type, applyNewRole);
     }
 }

@@ -38,6 +38,7 @@ public class ResourcesServerConfiguration  extends ResourceServerConfigurerAdapt
                 .antMatchers("/oauth/**").permitAll()
                 .antMatchers("/api/me/changepwd").authenticated()//.hasAnyAuthority(Roles.ROLE_VIEW)
                 .antMatchers("/user").authenticated()//.hasAnyAuthority(Roles.ROLE_VIEW)
+                .antMatchers("/api/role/valid/list/client", "/api/user/rights/apply", "/api/user/save/rights/apply", "/api/data-groups/valid/list/client").hasAnyAuthority(Roles.ROLE_NEW_LDAP_USER)
                 .antMatchers("/**").hasAnyAuthority(Roles.ROLE_ADMIN)
                 .and()
                 .headers().addHeaderWriter((request, response) -> {
