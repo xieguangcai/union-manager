@@ -1,7 +1,6 @@
 package com.coocaa.union.manager.roles;
 
 import com.coocaa.union.manager.applications.Application;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;

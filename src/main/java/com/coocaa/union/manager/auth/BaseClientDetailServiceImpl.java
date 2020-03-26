@@ -38,9 +38,7 @@ public class BaseClientDetailServiceImpl implements ClientDetailsService {
     BaseClientDetails clientDetails;
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        System.out.println(clientId);
         BaseClientDetails client = null;
-
         Application application = applicationService.findByAppKey(clientId);
         if(null == application) {
             throw new BaseJSONException(ErrorCodes.NO_CLIENTID);

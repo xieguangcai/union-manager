@@ -1,5 +1,6 @@
 package com.coocaa.union.manager.accounts;
 
+import com.coocaa.union.manager.applications.Application;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -21,7 +22,7 @@ public class DataGroup {
     private Date createTime;
     private Date modifyTime;
     private Integer sortId;
-    private Integer appId;
+    private Application application;
 
     private Set<DataItems> items;
     @Id
@@ -85,14 +86,14 @@ public class DataGroup {
         this.sortId = sortId;
     }
 
-    @Basic
-    @Column(name = "app_id", nullable = false)
-    public Integer getAppId() {
-        return appId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "app_id")
+    public Application getApplication() {
+        return application;
     }
 
-    public void setAppId(Integer appId) {
-        this.appId = appId;
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
     @Override
@@ -105,13 +106,12 @@ public class DataGroup {
                 Objects.equals(text, dataGroup.text) &&
                 Objects.equals(createTime, dataGroup.createTime) &&
                 Objects.equals(modifyTime, dataGroup.modifyTime) &&
-                Objects.equals(sortId, dataGroup.sortId) &&
-                Objects.equals(appId, dataGroup.appId);
+                Objects.equals(sortId, dataGroup.sortId) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, key, text, createTime, modifyTime, sortId, appId);
+        return Objects.hash(id, key, text, createTime, modifyTime, sortId);
     }
 
     @OneToMany(targetEntity = DataItems.class, cascade = CascadeType.PERSIST)

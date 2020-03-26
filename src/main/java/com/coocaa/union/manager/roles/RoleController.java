@@ -128,7 +128,8 @@ public class RoleController extends BaseController {
     @ResponseBody
     public ResponseObject<List<Role>> list() {
         List<Role> a = repository.findByStatus(1);
-        return ResponseObject.success(a);
+        List<Role> filter = a.stream().filter((item) -> item.getApplication().getStatus() == 1).collect(Collectors.toList());;
+        return ResponseObject.success(filter);
     }
 
     /**
