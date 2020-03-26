@@ -27,6 +27,10 @@ public class DataController extends BaseController {
     public ResponseObject<List<DataGroup>> allDataItems() {
         List<DataGroup> groupList = repository.findAll(new Sort(Sort.Direction.ASC, "sortId"));
         List<DataGroup> dataGroupList = groupList.stream().filter(group -> group.getApplication().getStatus() == 1).collect(Collectors.toList());
+        dataGroupList.stream().forEach(item -> {
+            item.getApplication().setAppSecret("");
+            item.getApplication().setAppKey("");
+        });
         return ResponseObject.success(dataGroupList);
     }
 
@@ -37,6 +41,10 @@ public class DataController extends BaseController {
         Integer appId = getAppId(user);
         List<DataGroup> groupList = repository.findAll(new Sort(Sort.Direction.ASC, "sortId"));
         List<DataGroup> dataGroupList = groupList.stream().filter(group -> group.getApplication().getAppId().equals(appId)).collect(Collectors.toList());
+        dataGroupList.stream().forEach(item -> {
+            item.getApplication().setAppSecret("");
+            item.getApplication().setAppKey("");
+        });
         return ResponseObject.success(dataGroupList);
     }
 }
