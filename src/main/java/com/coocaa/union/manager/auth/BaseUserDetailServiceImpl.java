@@ -105,7 +105,7 @@ public class BaseUserDetailServiceImpl implements UserDetailsService {
         if(account.getAccountStatus() == 1) {
             Map<String, List<String>> userDataGroups = new HashMap<>();
             for (DataItems item : account.getDataItems()) {
-                if(!item.getDataGroup().getAppId().equals(application.getAppId())) {
+                if(!item.getDataGroup().getApplication().getAppId().equals(application.getAppId())) {
                     continue;
                 }
                 List<String> itemKeys = userDataGroups.get(item.getDataGroup().getKey());
