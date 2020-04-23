@@ -1,5 +1,6 @@
 --新增表
-SET NAMES utf8mb4;
+SET NAMES utf8;
+use `union_role`;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -18,14 +19,11 @@ CREATE TABLE `union_data_group` (
   UNIQUE KEY `i_key_data_name` (`key`),
   KEY `i_rf_app_id` (`app_id`),
   CONSTRAINT `i_rf_app_id` FOREIGN KEY (`app_id`) REFERENCES `union_applications` (`app_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `union_role`.`union_data_group`(`id`, `key`, `text`, `create_time`, `modify_time`, `sort_id`, `app_id`) VALUES (1, 'business_type', '业务线', '2020-02-17 21:44:09', '2020-02-17 21:44:14', 1, 1);
 SET FOREIGN_KEY_CHECKS = 1;
 
-
-SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
 -- ----------------------------
 -- Table structure for union_data_items
 -- ----------------------------
@@ -40,7 +38,7 @@ CREATE TABLE `union_data_items` (
   `modify_time` datetime DEFAULT NULL,
   PRIMARY KEY (`item_id`) USING BTREE,
   KEY `rf_group_id` (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `union_role`.`union_data_items`(`item_id`, `group_id`, `value`, `text`, `sort_id`, `create_time`, `modify_time`) VALUES (1, 1, '0', '影视', 0, '2020-02-17 21:45:13', '2020-02-17 21:45:17');
 INSERT INTO `union_role`.`union_data_items`(`item_id`, `group_id`, `value`, `text`, `sort_id`, `create_time`, `modify_time`) VALUES (2, 1, '1', '教育', 1, '2020-02-17 21:45:45', '2020-02-17 21:45:50');
@@ -49,7 +47,9 @@ INSERT INTO `union_role`.`union_data_items`(`item_id`, `group_id`, `value`, `tex
 INSERT INTO `union_role`.`union_data_items`(`item_id`, `group_id`, `value`, `text`, `sort_id`, `create_time`, `modify_time`) VALUES (5, 1, '4', '宽带提速', 4, '2020-02-17 21:45:45', '2020-02-17 21:45:50');
 INSERT INTO `union_role`.`union_data_items`(`item_id`, `group_id`, `value`, `text`, `sort_id`, `create_time`, `modify_time`) VALUES (6, 1, '5', '江苏时移回看', 5, '2020-02-17 21:45:45', '2020-02-17 21:45:50');
 INSERT INTO `union_role`.`union_data_items`(`item_id`, `group_id`, `value`, `text`, `sort_id`, `create_time`, `modify_time`) VALUES (7, 1, '6', '游戏视频', 6, '2020-02-17 21:45:45', '2020-02-17 21:45:50');
+INSERT INTO `union_role`.`union_data_items`(`item_id`, `group_id`, `value`, `text`, `sort_id`, `create_time`, `modify_time`) VALUES (13, 1, '7', '直播业务', 7, '2020-04-20 11:28:04', '2020-04-20 11:28:13');
 SET FOREIGN_KEY_CHECKS = 1;
+
 
 CREATE TABLE `union_account_data_item` (
   `account_id` int(11) NOT NULL,
@@ -83,4 +83,4 @@ CREATE TABLE `union_account_role_apply` (
   KEY `account_id` (`account_id`) USING BTREE,
   CONSTRAINT `union_account_role_apply_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `union_accounts` (`account_id`),
   CONSTRAINT `union_account_role_apply_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `union_roles` (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
