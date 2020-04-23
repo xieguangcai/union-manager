@@ -7,10 +7,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 public class TokenStoreConfig {
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    /**
+     * 检查心跳保持redis连接
+     */
+    @Scheduled(cron = "0/10 * * * * *")
+    public void timer() {
+        redisTemplate.opsForValue().get("heartbeat");
+    }
+
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
 

@@ -11,7 +11,4 @@ spring:
   redis:
     host: union-redis-master
     port: 6379
-    jedis:
-      pool:
-        max-wait: 2000ms
     password: passunion123

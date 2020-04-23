@@ -14,6 +14,12 @@ spring:
     template-loader-path: classpath:/templates/
     enabled: false
     check-template-location: false
+  redis:
+    jedis:
+      pool:
+        max-wait: 500ms
+        min-idle: 5
+
 #  security:
 #    user:
 #      password: password

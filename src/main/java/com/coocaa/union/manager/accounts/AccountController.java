@@ -84,6 +84,8 @@ public class AccountController extends BaseController {
         }
         account.setCreateTime(new Date());
         account.setModifyTime(new Date());
+        account.setType(1);
+        account.setApplyNewRole(0);
         service.save(account);
         return ResponseObject.success(true);
     }
